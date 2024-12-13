@@ -311,12 +311,19 @@ function checkSelectedWord() {
       location.reload();
     }
   } else {
-    document.getElementById('loading-message').style.display = 'block';
+    const loadingMessage = document.getElementById('loading-message');
+    loadingMessage.style.display = 'block';
+
+    // Play the loading screen animation once, then redirect to "homescreen.html"
+    setTimeout(() => {
+      window.location.href = 'homescreen.html';
+    }, 3000); // Adjust the timeout duration to match the length of your animation
   }
 
   const likeness = calculateLikeness(word, password);
   displayLikeness(word, likeness);
 }
+
 
 
 function removeDudWord(gridElement) {
@@ -349,26 +356,35 @@ function resetAttempts() {
   console.log(`Attempts have been reset. Attempts remaining: ${attemptsRemaining}`);
 }
 
-
 function displayLikeness(word, likeness) {
   const likenessContainer = document.getElementById('likeness-container');
+  const maxMessages = 8; 
+
 
   const likenessMessage = document.createElement('div');
   likenessMessage.classList.add('likeness-message');
   likenessMessage.innerHTML = `&gt; ${word}<br>&gt; Likeness = ${likeness}`;
   likenessContainer.appendChild(likenessMessage);
-}
 
+  if (likenessContainer.children.length > maxMessages) {
+    likenessContainer.removeChild(likenessContainer.firstChild);
+  }
+}
 
 function displayMessage(message) {
   const likenessContainer = document.getElementById('likeness-container');
+  const maxMessages = 8; 
 
   const messageElement = document.createElement('div');
   messageElement.classList.add('likeness-message');
   messageElement.innerHTML = `&gt; ${message}`;
-  likenessContainer.appendChild(messageElement);
-}
 
+  likenessContainer.appendChild(messageElement);
+
+  if (likenessContainer.children.length > maxMessages) {
+    likenessContainer.removeChild(likenessContainer.firstChild);
+  }
+}
 
 function calculateLikeness(word, password) {
   let likeness = 0;
@@ -440,15 +456,20 @@ function containsWord(str) {
     console.log(`Attempts have been reset. Attempts remaining: ${attemptsRemaining}`);
   }  
 
-function displayLikeness(word, likeness) {
-  const likenessContainer = document.getElementById('likeness-container');
-
-  const likenessMessage = document.createElement('div');
-  likenessMessage.classList.add('likeness-message');
-  likenessMessage.innerHTML = `&gt; ${word}<br>&gt; Likeness = ${likeness}`;
-  likenessContainer.appendChild(likenessMessage);
-}
-
+  function displayLikeness(word, likeness) {
+    const likenessContainer = document.getElementById('likeness-container');
+    const maxMessages = 10;
+  
+    while (likenessContainer.children.length >= maxMessages) {
+      likenessContainer.removeChild(likenessContainer.firstChild);
+    }
+  
+    const likenessMessage = document.createElement('div');
+    likenessMessage.classList.add('likeness-message');
+    likenessMessage.innerHTML = `&gt; ${word}<br>&gt; Likeness = ${likeness}`;
+    likenessContainer.appendChild(likenessMessage);
+  }
+  
 function calculateLikeness(word, password) {
   let likeness = 0;
   for (let i = 0; i < word.length; i++) {
