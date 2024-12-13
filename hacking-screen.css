@@ -166,7 +166,8 @@ body, html {
   color: var(--text-color);
   font-size: 45px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column; 
+  justify-content: flex-end; 
 }
 
 .likeness-message {
