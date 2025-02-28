@@ -1,3 +1,4 @@
+
 const symbols = ['@', '#', '$', '%', '&', '*', '!', '^', '~', '=', '+', '/', '\\', '|', '<', '>', '?', ':', ';', '(', ')', '[', ']', '{', '}', '"', '\''];
 
 document.querySelectorAll('input[type="text"], input[type="password"]').forEach(input => {
@@ -97,6 +98,19 @@ let allWords = words2.concat(words4);
 let password = allWords[Math.floor(Math.random() * allWords.length)];
 console.log('Password:', password); 
 
+// Sounds
+const successSound = ['sounds/success.mp3']
+const scrollSounds = ['sounds/charscroll/ui_hacking_charscroll_lp.wav', 'sounds/charscroll/ui_hacking_charscroll.wav'];
+const singleSounds = ['sounds/charsingle/ui_hacking_charsingle_02.wav', 'sounds/charsingle/ui_hacking_charsingle_03.wav'];
+const enterSounds = ['sounds/charenter/ui_hacking_charenter_01.wav', 'sounds/charenter/ui_hacking_charenter_02.wav', 'sounds/charenter/ui_hacking_charenter_03.wav', 
+  'sounds/charsingle/ui_hacking_charsingle_05.wav', 'sounds/charsingle/ui_hacking_charsingle_06.wav'];
+
+function playSound(soundArray) {
+  const soundSrc = soundArray[Math.floor(Math.random() * soundArray.length)];
+  const audio = new Audio(soundSrc);
+  audio.play();
+}
+
 document.addEventListener('keydown', function(event) {
   let gridElement, gridData, gridRows;
 
@@ -117,12 +131,15 @@ document.addEventListener('keydown', function(event) {
 
   switch (event.key) {
     case 'ArrowUp':
+      playSound(scrollSounds);
       if (cursorPosition.y > 0) cursorPosition.y--;
       break;
     case 'ArrowDown':
+      playSound(scrollSounds);
       if (cursorPosition.y < gridData.length - 1) cursorPosition.y++;
       break;
     case 'ArrowLeft':
+      playSound(singleSounds);
       if (cursorPosition.x > 0) {
         cursorPosition.x--;
       } else if (currentGrid === 'grid4') {
@@ -134,6 +151,7 @@ document.addEventListener('keydown', function(event) {
       }
       break;
     case 'ArrowRight':
+      playSound(singleSounds);
       const row = gridData[cursorPosition.y];
       const charIndex = cursorPosition.x;
 
@@ -153,12 +171,14 @@ document.addEventListener('keydown', function(event) {
       }
       break;
     case 'Enter':
+      playSound(enterSounds);
       checkSelectedWord();
       break;
   }
 
   updateHighlight(gridElement, gridData);
 });
+
 
 let interactedDelimiters = new Set(); 
 
@@ -311,6 +331,7 @@ function checkSelectedWord() {
       location.reload();
     }
   } else {
+    playSound(successSound);
     const loadingMessage = document.getElementById('loading-message');
     loadingMessage.style.display = 'block';
 
